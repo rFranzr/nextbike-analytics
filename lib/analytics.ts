@@ -51,6 +51,17 @@ export type DistanceHistogramBin = {
   count: number;
 };
 
+export type RideSegment = {
+  id: number;
+  startLat: number;
+  startLng: number;
+  endLat: number;
+  endLng: number;
+  startTime: Date;
+  endTime: Date;
+  distanceKm: number;
+};
+
 function toRadians(value: number): number {
   return (value * Math.PI) / 180;
 }
@@ -277,6 +288,55 @@ export function computeDistanceHistogram(
       count: counts[b.label] ?? 0,
     }))
     .filter((bin) => bin.count > 0);
+}
+
+export function extractRideSegments(
+  items: ListAccountItem[] | undefined | null,
+): RideSegment[] {
+  if (!items) return [];
+
+  const segments: RideSegment[] = [];
+
+  for (const item of items) {
+    if (item.node !== "rental") continue;
+    if (
+      typeof item.start_place_lat !== "number" ||
+      typeof item.start_place_lng !== "number" ||
+      typeof item.end_place_lat !== "number" ||
+      typeof item.end_place_lng !== "number"
+    ) {
+      continue;
+    }
+
+    const baseMeters =
+      (typeof item.distance === "number" ? item.distance : 0) ||
+      (typeof item.distance_estimated === "number" ? item.distance_estimated : 0);
+
+    let distanceKm = 0;
+    if (baseMeters > 0) {
+      distanceKm = baseMeters / 1000;
+    } else {
+      distanceKm = haversineKm(
+        item.start_place_lat,
+        item.start_place_lng,
+        item.end_place_lat,
+        item.end_place_lng,
+      );
+    }
+
+    segments.push({
+      id: item.id,
+      startLat: item.start_place_lat,
+      startLng: item.start_place_lng,
+      endLat: item.end_place_lat,
+      endLng: item.end_place_lng,
+      startTime: item.start_time ? new Date(item.start_time * 1000) : new Date(),
+      endTime: item.end_time ? new Date(item.end_time * 1000) : new Date(),
+      distanceKm,
+    });
+  }
+
+  return segments;
 }
 
 

@@ -1,19 +1,21 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import axios from "axios";
 import { useRouter } from "next/navigation";
+import dynamic from "next/dynamic";
 
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { WeeklyDistanceHeatmap } from "@/components/charts/weekly-heatmap";
+// import { WeeklyDistanceHeatmap } from "@/components/charts/weekly-heatmap";
 import { DistanceHistogram } from "@/components/charts/distance-histogram";
 import {
   computeDistanceHistogram,
-  computeHourlyHeatmap,
+  // computeHourlyHeatmap,
   computeMonthlyStats,
   computeSummaryStats,
   extractRentalRides,
+  extractRideSegments,
   type ListAccountItem,
 } from "@/lib/analytics";
 
@@ -39,6 +41,16 @@ export default function AnalyticsPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [data, setData] = useState<ListResponse | null>(null);
+
+  const RidesMap = useMemo(
+    () =>
+      dynamic(() => import("@/components/map/rides-map").then((m) => m.RidesMap), {
+        loading: () => <p className="text-sm text-muted-foreground">Loading map...</p>,
+        ssr: false,
+      }),
+    [],
+  );
+  
 
   useEffect(() => {
     let cancelled = false;
@@ -102,8 +114,9 @@ export default function AnalyticsPage() {
   const rentalRides = extractRentalRides(data?.account?.items);
   const summary = computeSummaryStats(rentalRides);
   const monthly = computeMonthlyStats(rentalRides);
-  const { cells: heatmapCells } = computeHourlyHeatmap(rentalRides);
+  // const { cells: heatmapCells } = computeHourlyHeatmap(rentalRides);
   const distanceBins = computeDistanceHistogram(rentalRides);
+  const rideSegments = extractRideSegments(data?.account?.items);
 
   const formatKm = (value: number) => `${value.toFixed(1)} km`;
   const formatMinutes = (value: number) => {
@@ -266,7 +279,7 @@ export default function AnalyticsPage() {
           </Card>
         )}
 
-        {!loading && !error && heatmapCells.length > 0 && (
+        {/* {!loading && !error && heatmapCells.length > 0 && (
           <Card>
             <CardHeader>
               <CardTitle>Weekly hourly distance heatmap</CardTitle>
@@ -278,7 +291,7 @@ export default function AnalyticsPage() {
               <WeeklyDistanceHeatmap cells={heatmapCells} />
             </CardContent>
           </Card>
-        )}
+        )} */}
 
         {!loading && !error && distanceBins.length > 0 && (
           <Card>
@@ -290,6 +303,20 @@ export default function AnalyticsPage() {
             </CardHeader>
             <CardContent className="space-y-3 text-xs">
               <DistanceHistogram bins={distanceBins} />
+            </CardContent>
+          </Card>
+        )}
+
+        {!loading && !error && rideSegments.length > 0 && (
+          <Card>
+            <CardHeader>
+              <CardTitle>Rides map</CardTitle>
+              <CardDescription>
+                Interactive map showing start points (green) and end points (red) of all rides.
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <RidesMap segments={rideSegments} />
             </CardContent>
           </Card>
         )}
