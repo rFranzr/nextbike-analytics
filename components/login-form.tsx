@@ -78,8 +78,8 @@ export function LoginForm() {
   }
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-gradient-to-b from-background to-muted px-4">
-      <Card className="w-full max-w-md">
+    <div className="flex items-center justify-center from-background to-muted">
+      <Card className="w-full">
         <CardHeader>
           <CardTitle>Nextbike Analytics Login</CardTitle>
           <CardDescription>Sign in with your Nextbike mobile number and PIN.</CardDescription>
@@ -120,7 +120,7 @@ export function LoginForm() {
         </CardContent>
         <CardFooter>
           <p className="text-xs text-muted-foreground">
-            Your credentials are sent directly to the official Nextbike API endpoint.
+            Your credentials are sent directly to the official Nextbike API endpoint as this application does not use any backend server or database. Your session data is stored temporarily in your browser&apos;s session storage and is never transmitted to any third-party service. You can clear this data at any time by logging out.
           </p>
         </CardFooter>
       </Card>
