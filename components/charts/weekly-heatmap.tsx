@@ -70,7 +70,7 @@ export function WeeklyDistanceHeatmap({ cells }: WeeklyDistanceHeatmapProps) {
         borderWidth={1}
         borderColor="#020617"
         labelTextColor="#000000"
-        label={(d) => ""}
+        label={() => ""}
         legends={[
           {
             anchor: "bottom",
@@ -88,14 +88,15 @@ export function WeeklyDistanceHeatmap({ cells }: WeeklyDistanceHeatmapProps) {
             titleOffset: 4,
           },
         ]}
-        tooltip={({ cell }) => (
-          <div className="rounded-md border bg-popover px-2 py-1 text-xs shadow-sm">
-            <div className="font-medium">
-              {cell.serieId}
+        tooltip={({ cell }) => {
+          const { serieId, formattedValue } = cell;
+          return (
+            <div className="rounded-md border bg-popover px-2 py-1 text-xs shadow-sm">
+              <div className="font-medium">{serieId}</div>
+              <div className="font-mono">{formattedValue}</div>
             </div>
-            <div className="font-mono">{cell.formattedValue}</div>
-          </div>
-        )}
+          );
+        }}
       />
     </div>
   );

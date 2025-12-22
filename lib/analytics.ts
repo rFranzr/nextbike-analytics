@@ -16,6 +16,7 @@ export type ListAccountItem = {
   end_place_lng?: number;
   distance?: number;
   distance_estimated?: number;
+  bike?: number | string; // Bike ID or bike number
 };
 
 export type RentalRide = {
@@ -24,6 +25,7 @@ export type RentalRide = {
   durationMinutes: number;
   realDistanceKm: number;
   dayKey: string;
+  bikeId?: number | string; // Bike ID if available
 };
 
 export type SummaryStats = {
@@ -139,6 +141,7 @@ export function extractRentalRides(items: ListAccountItem[] | undefined | null):
       durationMinutes,
       realDistanceKm,
       dayKey,
+      bikeId: item.bike,
     });
   }
 
@@ -297,6 +300,49 @@ export function computeDistanceHistogram(
       count: counts[b.label] ?? 0,
     }))
     .filter((bin) => bin.count > 0);
+}
+
+export type FavoriteBike = {
+  bikeId: number | string | null;
+  rideCount: number;
+};
+
+export function computeFavoriteBike(rides: RentalRide[]): FavoriteBike | null {
+  if (!rides.length) return null;
+
+  // Count rides per bike
+  const bikeCounts: Map<string | number, { count: number; name?: string }> =
+    new Map();
+
+  for (const ride of rides) {
+    // Use bike ID if available, otherwise skip (can't track favorite without bike info)
+    if (ride.bikeId === undefined || ride.bikeId === null) continue;
+
+    const bikeKey = ride.bikeId;
+    const current = bikeCounts.get(bikeKey) ?? { count: 0 };
+    bikeCounts.set(bikeKey, {
+      count: current.count + 1,
+    });
+  }
+
+  if (bikeCounts.size === 0) return null;
+
+  // Find the bike with the most rides
+  let favorite: { bikeId: string | number; count: number; name?: string } | null =
+    null;
+
+  for (const [bikeId, data] of bikeCounts.entries()) {
+    if (!favorite || data.count > favorite.count) {
+      favorite = { bikeId, count: data.count, name: data.name };
+    }
+  }
+
+  if (!favorite) return null;
+
+  return {
+    bikeId: favorite.bikeId,
+    rideCount: favorite.count,
+  };
 }
 
 export function extractRideSegments(

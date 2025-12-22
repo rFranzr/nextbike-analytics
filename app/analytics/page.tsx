@@ -13,6 +13,7 @@ import { WeeklyDistanceHeatmap } from "@/components/charts/weekly-heatmap";
 import { DistanceHistogram } from "@/components/charts/distance-histogram";
 import {
   computeDistanceHistogram,
+  computeFavoriteBike,
   computeHourlyHeatmap,
   computeMonthlyStats,
   computeSummaryStats,
@@ -181,6 +182,7 @@ export default function AnalyticsPage() {
   const monthly = computeMonthlyStats(filteredRides);
   const { cells: heatmapCells } = computeHourlyHeatmap(filteredRides);
   const distanceBins = computeDistanceHistogram(filteredRides);
+  const favoriteBike = computeFavoriteBike(filteredRides);
 
   const formatKm = (value: number) => `${value.toFixed(1)} km`;
   const formatMinutes = (value: number) => {
@@ -329,6 +331,19 @@ export default function AnalyticsPage() {
                       {formatMinutes(summary.avgDurationPerRideDayMinutes)}
                     </div>
                   </div>
+                  {favoriteBike && (
+                    <div className="space-y-1">
+                      <div className="text-xs uppercase tracking-wide text-muted-foreground">
+                        Favorite bike
+                      </div>
+                      <div className="text-lg font-semibold font-mono">
+                        {`Bike #${favoriteBike.bikeId}`}
+                      </div>
+                      <div className="text-xs text-muted-foreground">
+                        {favoriteBike.rideCount} {favoriteBike.rideCount === 1 ? "ride" : "rides"}
+                      </div>
+                    </div>
+                  )}
                 </div>
               </>
             )}
