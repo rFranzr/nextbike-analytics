@@ -44,10 +44,10 @@ export function WeeklyDistanceHeatmap({ cells }: WeeklyDistanceHeatmapProps) {
   if (!data.length) return null;
 
   return (
-    <div style={{ height: 320 }}>
+    <div style={{ height: 350 }}>
       <ResponsiveHeatMap
         data={data}
-        margin={{ top: 20, right: 10, bottom: 40, left: 50 }}
+        margin={{ top: 20, right: 10, bottom: 45, left: 50 }}
         valueFormat={(value) => `${value} km`}
         axisTop={null}
         axisRight={null}
