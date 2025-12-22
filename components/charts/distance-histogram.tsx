@@ -26,7 +26,7 @@ export function DistanceHistogram({ bins }: DistanceHistogramProps) {
         padding={0.3}
         valueScale={{ type: "linear" }}
         indexScale={{ type: "band", round: true }}
-        colors={{ scheme: "blues" }}
+        colors="#3b82f6"
         axisTop={null}
         axisRight={null}
         axisBottom={{
@@ -47,7 +47,7 @@ export function DistanceHistogram({ bins }: DistanceHistogramProps) {
         }}
         labelSkipWidth={12}
         labelSkipHeight={12}
-        labelTextColor={{ from: "color", modifiers: [["darker", 1.6]] }}
+        labelTextColor="#ffffff"
         tooltip={({ value }) => (
           <div className="rounded-md border bg-popover px-2 py-1 text-xs shadow-sm">
             <div className="font-mono">{value} trips</div>
@@ -57,7 +57,7 @@ export function DistanceHistogram({ bins }: DistanceHistogramProps) {
           axis: {
             ticks: {
               text: {
-                fill: "hsl(var(--muted-foreground))",
+                fill: "hsl(var(--gray-500))",
                 fontSize: 11,
               },
             },
