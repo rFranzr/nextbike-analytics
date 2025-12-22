@@ -10,6 +10,9 @@
   },
   "dependencies": {
     "@base-ui/react": "^1.0.0",
+    "@nivo/bar": "^0.85.0",
+    "@nivo/core": "^0.85.0",
+    "@nivo/heatmap": "^0.85.0",
     "axios": "^1.7.9",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
