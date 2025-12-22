@@ -7,11 +7,11 @@ import dynamic from "next/dynamic";
 
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-// import { WeeklyDistanceHeatmap } from "@/components/charts/weekly-heatmap";
+import { WeeklyDistanceHeatmap } from "@/components/charts/weekly-heatmap";
 import { DistanceHistogram } from "@/components/charts/distance-histogram";
 import {
   computeDistanceHistogram,
-  // computeHourlyHeatmap,
+  computeHourlyHeatmap,
   computeMonthlyStats,
   computeSummaryStats,
   extractRentalRides,
@@ -114,7 +114,7 @@ export default function AnalyticsPage() {
   const rentalRides = extractRentalRides(data?.account?.items);
   const summary = computeSummaryStats(rentalRides);
   const monthly = computeMonthlyStats(rentalRides);
-  // const { cells: heatmapCells } = computeHourlyHeatmap(rentalRides);
+  const { cells: heatmapCells } = computeHourlyHeatmap(rentalRides);
   const distanceBins = computeDistanceHistogram(rentalRides);
   const rideSegments = extractRideSegments(data?.account?.items);
 
@@ -279,19 +279,19 @@ export default function AnalyticsPage() {
           </Card>
         )}
 
-        {/* {!loading && !error && heatmapCells.length > 0 && (
+        {!loading && !error && heatmapCells.length > 0 && (
           <Card>
             <CardHeader>
               <CardTitle>Weekly hourly distance heatmap</CardTitle>
               <CardDescription>
-                Each cell shows total distance ridden in that weekday/hour bucket (local time). Darker cells mean more kilometers.
+                Rows show hours (0-23), columns show weekdays. Hover over cells to see distance in kilometers.
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-3 text-xs">
               <WeeklyDistanceHeatmap cells={heatmapCells} />
             </CardContent>
           </Card>
-        )} */}
+        )}
 
         {!loading && !error && distanceBins.length > 0 && (
           <Card>

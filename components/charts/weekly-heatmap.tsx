@@ -47,16 +47,18 @@ export function WeeklyDistanceHeatmap({ cells }: WeeklyDistanceHeatmapProps) {
     <div style={{ height: 320 }}>
       <ResponsiveHeatMap
         data={data}
-        margin={{ top: 20, right: 10, bottom: 40, left: 40 }}
+        margin={{ top: 20, right: 10, bottom: 40, left: 50 }}
         valueFormat={(value) => `${value} km`}
-        axisTop={{
-          tickSize: 0,
-          tickPadding: 4,
+        axisTop={null}
+        axisRight={null}
+        axisLeft={{
+          tickSize: 5,
+          tickPadding: 5,
           tickRotation: 0,
         }}
-        axisLeft={{
-          tickSize: 0,
-          tickPadding: 4,
+        axisBottom={{
+          tickSize: 5,
+          tickPadding: 5,
           tickRotation: 0,
         }}
         colors={{
@@ -67,6 +69,8 @@ export function WeeklyDistanceHeatmap({ cells }: WeeklyDistanceHeatmapProps) {
         inactiveOpacity={0.4}
         borderWidth={1}
         borderColor="#020617"
+        labelTextColor="#000000"
+        label={(d) => ""}
         legends={[
           {
             anchor: "bottom",
@@ -79,7 +83,7 @@ export function WeeklyDistanceHeatmap({ cells }: WeeklyDistanceHeatmapProps) {
             tickSize: 3,
             tickSpacing: 4,
             tickOverlap: false,
-            title: "Distance per hour (km) →",
+            title: "Distance (km) →",
             titleAlign: "start",
             titleOffset: 4,
           },
@@ -87,7 +91,7 @@ export function WeeklyDistanceHeatmap({ cells }: WeeklyDistanceHeatmapProps) {
         tooltip={({ cell }) => (
           <div className="rounded-md border bg-popover px-2 py-1 text-xs shadow-sm">
             <div className="font-medium">
-              {cell.serieId} @ {cell.x}:00
+              {cell.serieId}
             </div>
             <div className="font-mono">{cell.formattedValue}</div>
           </div>
