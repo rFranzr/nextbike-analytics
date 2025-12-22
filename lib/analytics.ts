@@ -1,3 +1,5 @@
+import { HAVERSINE_DISTANCE_ADJUSTMENT_FACTOR } from "@/config";
+
 const EARTH_RADIUS_KM = 6371;
 
 export type ListAccountItem = {
@@ -114,12 +116,13 @@ export function extractRentalRides(items: ListAccountItem[] | undefined | null):
       typeof item.end_place_lat === "number" &&
       typeof item.end_place_lng === "number"
     ) {
-      realDistanceKm = haversineKm(
-        item.start_place_lat,
-        item.start_place_lng,
-        item.end_place_lat,
-        item.end_place_lng,
-      );
+      realDistanceKm =
+        haversineKm(
+          item.start_place_lat,
+          item.start_place_lng,
+          item.end_place_lat,
+          item.end_place_lng,
+        ) * HAVERSINE_DISTANCE_ADJUSTMENT_FACTOR;
     }
 
     const dayKey = startTime.toISOString().slice(0, 10); // YYYY-MM-DD
@@ -316,12 +319,13 @@ export function extractRideSegments(
     if (baseMeters > 0) {
       distanceKm = baseMeters / 1000;
     } else {
-      distanceKm = haversineKm(
-        item.start_place_lat,
-        item.start_place_lng,
-        item.end_place_lat,
-        item.end_place_lng,
-      );
+      distanceKm =
+        haversineKm(
+          item.start_place_lat,
+          item.start_place_lng,
+          item.end_place_lat,
+          item.end_place_lng,
+        ) * HAVERSINE_DISTANCE_ADJUSTMENT_FACTOR;
     }
 
     segments.push({
