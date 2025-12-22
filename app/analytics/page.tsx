@@ -7,6 +7,8 @@ import dynamic from "next/dynamic";
 
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import { WeeklyDistanceHeatmap } from "@/components/charts/weekly-heatmap";
 import { DistanceHistogram } from "@/components/charts/distance-histogram";
 import {
@@ -36,11 +38,46 @@ type ListResponse = {
   };
 };
 
+// Helper function to get date string in YYYY-MM-DD format
+function formatDateForInput(date: Date): string {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
+  return `${year}-${month}-${day}`;
+}
+
+// Helper function to get start of day
+function startOfDay(date: Date): Date {
+  const d = new Date(date);
+  d.setHours(0, 0, 0, 0);
+  return d;
+}
+
+// Helper function to get end of day
+function endOfDay(date: Date): Date {
+  const d = new Date(date);
+  d.setHours(23, 59, 59, 999);
+  return d;
+}
+
 export default function AnalyticsPage() {
   const router = useRouter();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [data, setData] = useState<ListResponse | null>(null);
+
+  // Initialize date range: 12 months ago to today
+  const getDefaultDateRange = () => {
+    const today = new Date();
+    const twelveMonthsAgo = new Date();
+    twelveMonthsAgo.setMonth(today.getMonth() - 12);
+    return {
+      start: formatDateForInput(twelveMonthsAgo),
+      end: formatDateForInput(today),
+    };
+  };
+
+  const [dateRange, setDateRange] = useState(getDefaultDateRange());
 
   const RidesMap = useMemo(
     () =>
@@ -111,12 +148,39 @@ export default function AnalyticsPage() {
   }, []);
 
   const user = data?.user;
-  const rentalRides = extractRentalRides(data?.account?.items);
-  const summary = computeSummaryStats(rentalRides);
-  const monthly = computeMonthlyStats(rentalRides);
-  const { cells: heatmapCells } = computeHourlyHeatmap(rentalRides);
-  const distanceBins = computeDistanceHistogram(rentalRides);
-  const rideSegments = extractRideSegments(data?.account?.items);
+  const allRentalRides = extractRentalRides(data?.account?.items);
+  const allRideSegments = extractRideSegments(data?.account?.items);
+
+  // Filter rides by date range
+  const filteredRides = useMemo(() => {
+    if (!dateRange.start || !dateRange.end) return allRentalRides;
+
+    const startDate = startOfDay(new Date(dateRange.start));
+    const endDate = endOfDay(new Date(dateRange.end));
+
+    return allRentalRides.filter((ride) => {
+      const rideDate = startOfDay(ride.startTime);
+      return rideDate >= startDate && rideDate <= endDate;
+    });
+  }, [allRentalRides, dateRange.start, dateRange.end]);
+
+  // Filter ride segments by date range
+  const filteredSegments = useMemo(() => {
+    if (!dateRange.start || !dateRange.end) return allRideSegments;
+
+    const startDate = startOfDay(new Date(dateRange.start));
+    const endDate = endOfDay(new Date(dateRange.end));
+
+    return allRideSegments.filter((segment) => {
+      const segmentDate = startOfDay(segment.startTime);
+      return segmentDate >= startDate && segmentDate <= endDate;
+    });
+  }, [allRideSegments, dateRange.start, dateRange.end]);
+
+  const summary = computeSummaryStats(filteredRides);
+  const monthly = computeMonthlyStats(filteredRides);
+  const { cells: heatmapCells } = computeHourlyHeatmap(filteredRides);
+  const distanceBins = computeDistanceHistogram(filteredRides);
 
   const formatKm = (value: number) => `${value.toFixed(1)} km`;
   const formatMinutes = (value: number) => {
@@ -160,6 +224,43 @@ export default function AnalyticsPage() {
       </header>
 
       <main className="mx-auto flex w-full max-w-5xl flex-1 flex-col gap-4">
+        <Card>
+          <CardHeader>
+            <CardTitle>Date Range</CardTitle>
+            <CardDescription>
+              Select a date range to filter the analytics data.
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="flex flex-col gap-4 sm:flex-row sm:items-end">
+              <div className="flex-1 space-y-2">
+                <Label htmlFor="start-date">Start Date</Label>
+                <Input
+                  id="start-date"
+                  type="date"
+                  value={dateRange.start}
+                  onChange={(e) =>
+                    setDateRange((prev) => ({ ...prev, start: e.target.value }))
+                  }
+                  max={dateRange.end}
+                />
+              </div>
+              <div className="flex-1 space-y-2">
+                <Label htmlFor="end-date">End Date</Label>
+                <Input
+                  id="end-date"
+                  type="date"
+                  value={dateRange.end}
+                  onChange={(e) =>
+                    setDateRange((prev) => ({ ...prev, end: e.target.value }))
+                  }
+                  min={dateRange.start}
+                  max={formatDateForInput(new Date())}
+                />
+              </div>
+            </div>
+          </CardContent>
+        </Card>
         <Card>
           <CardHeader>
             <CardTitle>Rides overview</CardTitle>
@@ -307,7 +408,7 @@ export default function AnalyticsPage() {
           </Card>
         )}
 
-        {!loading && !error && rideSegments.length > 0 && (
+        {!loading && !error && filteredSegments.length > 0 && (
           <Card>
             <CardHeader>
               <CardTitle>Rides map</CardTitle>
@@ -316,7 +417,7 @@ export default function AnalyticsPage() {
               </CardDescription>
             </CardHeader>
             <CardContent>
-              <RidesMap segments={rideSegments} />
+              <RidesMap segments={filteredSegments} />
             </CardContent>
           </Card>
         )}

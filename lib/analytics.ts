@@ -1,4 +1,7 @@
-import { HAVERSINE_DISTANCE_ADJUSTMENT_FACTOR } from "@/config";
+import {
+  HAVERSINE_DISTANCE_ADJUSTMENT_FACTOR,
+  MAX_RIDE_DISTANCE_KM,
+} from "@/config";
 
 const EARTH_RADIUS_KM = 6371;
 
@@ -124,6 +127,9 @@ export function extractRentalRides(items: ListAccountItem[] | undefined | null):
           item.end_place_lng,
         ) * HAVERSINE_DISTANCE_ADJUSTMENT_FACTOR;
     }
+
+    // skip rides exceeding maximum distance threshold
+    if (realDistanceKm > MAX_RIDE_DISTANCE_KM) continue;
 
     const dayKey = startTime.toISOString().slice(0, 10); // YYYY-MM-DD
 
@@ -327,6 +333,9 @@ export function extractRideSegments(
           item.end_place_lng,
         ) * HAVERSINE_DISTANCE_ADJUSTMENT_FACTOR;
     }
+
+    // skip rides exceeding maximum distance threshold
+    if (distanceKm > MAX_RIDE_DISTANCE_KM) continue;
 
     segments.push({
       id: item.id,
