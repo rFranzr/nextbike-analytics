@@ -8,6 +8,8 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter }
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
+import { NEXTBIKE_API_KEY } from "@/config";
+
 
 type NextbikeUser = {
   id: number;
@@ -23,8 +25,6 @@ type LoginResponse = {
 };
 
 const LOGIN_URL = "https://api.nextbike.net/api/v1.1/login.json";
-
-const API_KEY = "rXXqTgQZUPZ89lzB";
 
 export function LoginForm() {
   const [mobile, setMobile] = useState("");
@@ -49,7 +49,7 @@ export function LoginForm() {
         // Let the browser set standard headers (User-Agent, Accept, etc.)
         // Adding custom headers here can cause CORS preflight failures.
         params: {
-          api_key: API_KEY,
+          api_key: NEXTBIKE_API_KEY,
           mobile,
           pin,
         },

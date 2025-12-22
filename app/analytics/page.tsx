@@ -18,9 +18,9 @@ import {
   extractRideSegments,
   type ListAccountItem,
 } from "@/lib/analytics";
+import { NEXTBIKE_API_KEY } from "@/config";
 
 const LIST_URL = "https://api.nextbike.net/api/v1.1/list.json";
-const API_KEY = "rXXqTgQZUPZ89lzB";
 
 type ListUser = {
   id: number;
@@ -79,7 +79,7 @@ export default function AnalyticsPage() {
 
         const response = await axios.get<ListResponse>(LIST_URL, {
           params: {
-            apikey: API_KEY,
+            apikey: NEXTBIKE_API_KEY,
             loginkey,
             limit: 10000000000,
           },
