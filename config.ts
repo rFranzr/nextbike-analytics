@@ -12,6 +12,8 @@
 export const HAVERSINE_DISTANCE_ADJUSTMENT_FACTOR = 1.2;
 export const NEXTBIKE_API_KEY = "rXXqTgQZUPZ89lzB";
 
+export const ASSET_BASE_PATH = "/nextbike-analytics"
+
 /**
  * Maximum ride distance in kilometers.
  * Rides exceeding this distance will be excluded from analytics.

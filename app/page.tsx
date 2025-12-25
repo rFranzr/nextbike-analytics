@@ -1,6 +1,7 @@
 import Image from "next/image";
 import { LoginForm } from "@/components/login-form";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import { ASSET_BASE_PATH } from "@/config";
 
 export default function Page() {
   return (
@@ -12,7 +13,7 @@ export default function Page() {
             <div className="text-center space-y-4">
               <div className="flex items-center justify-center gap-4">
                 <Image
-                  src="/logo.webp"
+                  src={`${ASSET_BASE_PATH}/logo.webp`}
                   alt="Nextbike Analytics Logo"
                   width={80}
                   height={80}
@@ -36,7 +37,7 @@ export default function Page() {
               <CardContent className="p-0">
                 <div className="relative w-full aspect-video overflow-hidden rounded-lg">
                   <Image
-                    src="/map.webp"
+                    src={`${ASSET_BASE_PATH}/map.webp`}
                     alt="Nextbike Analytics Dashboard Overview"
                     fill
                     className="object-contain"
