@@ -65,6 +65,12 @@ export function LoginForm() {
         window.sessionStorage.setItem("nextbike_session", JSON.stringify(data));
       }
 
+      // --- UMAMI TRACKING START ---
+      if (typeof window !== "undefined" && window.umami) {
+        window.umami.track('Successful Login', { user_id: data.user.id });
+      }
+      // --- UMAMI TRACKING END ---
+
       router.push("/analytics");
     } catch (err) {
       const message =
