@@ -10,11 +10,24 @@ export default function Page() {
           <div className="mx-auto max-w-4xl space-y-8">
             {/* Hero Section */}
             <div className="text-center space-y-4">
-              <h1 className="text-4xl font-bold tracking-tight sm:text-5xl">
-                Nextbike Analytics
-              </h1>
+              <div className="flex items-center justify-center gap-4">
+                <Image
+                  src="/logo.webp"
+                  alt="Nextbike Analytics Logo"
+                  width={80}
+                  height={80}
+                  className="object-contain"
+                  priority
+                />
+                <h1 className="text-4xl font-bold tracking-tight sm:text-5xl">
+                   Nextbike Analytics
+                </h1>
+              </div>
               <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-                Analyze your Nextbike ride history with detailed statistics, visualizations, and insights.
+                Analyze your Nextbike ride history with detailed statistics, visualizations, and insights. 📊
+              </p>
+              <p className="text-sm text-muted-foreground max-w-2xl mx-auto mt-2">
+                100% client-side • No backend • No cookies • Your data stays in your browser
               </p>
             </div>
 
@@ -43,35 +56,43 @@ export default function Page() {
 
             {/* Features Section */}
             <div className="grid gap-6 md:grid-cols-2">
-              <Card>
+              <Card className="hover:shadow-lg transition-shadow">
                 <CardHeader>
-                  <CardTitle>Comprehensive Statistics</CardTitle>
+                  <CardTitle className="flex items-center gap-2">
+                    <span>📈</span> Comprehensive Statistics
+                  </CardTitle>
                   <CardDescription>
-                    View total rides, distance, duration, and averages per ride day.
+                    View total rides, distance, duration, and averages per ride day. Get the full picture of your cycling journey!
                   </CardDescription>
                 </CardHeader>
               </Card>
-              <Card>
+              <Card className="hover:shadow-lg transition-shadow">
                 <CardHeader>
-                  <CardTitle>Visual Analytics</CardTitle>
+                  <CardTitle className="flex items-center gap-2">
+                    <span>🗺️</span> Visual Analytics
+                  </CardTitle>
                   <CardDescription>
-                    Explore your riding patterns with heatmaps, histograms, and interactive maps.
+                    Explore your riding patterns with heatmaps, histograms, and interactive maps. See your data come to life!
                   </CardDescription>
                 </CardHeader>
               </Card>
-              <Card>
+              <Card className="hover:shadow-lg transition-shadow">
                 <CardHeader>
-                  <CardTitle>Monthly Breakdown</CardTitle>
+                  <CardTitle className="flex items-center gap-2">
+                    <span>📅</span> Monthly Breakdown
+                  </CardTitle>
                   <CardDescription>
-                    Track your progress over time with detailed monthly statistics.
+                    Track your progress over time with detailed monthly statistics. Watch your cycling habits evolve!
                   </CardDescription>
                 </CardHeader>
               </Card>
-              <Card>
+              <Card className="hover:shadow-lg transition-shadow">
                 <CardHeader>
-                  <CardTitle>Favorite Bike</CardTitle>
+                  <CardTitle className="flex items-center gap-2">
+                    <span>🚲</span> Favorite Bike
+                  </CardTitle>
                   <CardDescription>
-                    Discover which bike you ride most frequently.
+                    Discover which bike you ride most frequently. Find your trusty steed!
                   </CardDescription>
                 </CardHeader>
               </Card>
@@ -86,7 +107,7 @@ export default function Page() {
         <div className="container mx-auto px-4">
           <div className="flex flex-col items-center justify-between gap-4 md:flex-row">
             <p className="text-sm text-muted-foreground">
-              © {new Date().getFullYear()} Nextbike Analytics. Open source analytics tool.
+              © {new Date().getFullYear()} Nextbike Analytics. Made with ❤️ for the Nextbike community 🚴‍♂️🚴‍♀️
             </p>
             <a
               href="https://github.com/yourusername/nextbike-analysis"

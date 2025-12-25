@@ -211,18 +211,34 @@ export default function AnalyticsPage() {
             )}
           </p>
         </div>
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={() => {
-            if (typeof window !== "undefined") {
-              window.sessionStorage.removeItem("nextbike_session");
-            }
-            router.push("/");
-          }}
-        >
-          Log out
-        </Button>
+        <div className="flex items-center gap-3">
+          <Button
+            variant="default"
+            size="sm"
+            className="bg-blue-600 hover:bg-blue-700 text-white"
+            asChild
+          >
+            <a
+              href="https://buymeacoffee.com/rfranzr"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              ☕ Buy me a coffee
+            </a>
+          </Button>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => {
+              if (typeof window !== "undefined") {
+                window.sessionStorage.removeItem("nextbike_session");
+              }
+              router.push("/");
+            }}
+          >
+            Log out
+          </Button>
+        </div>
       </header>
 
       <main className="mx-auto flex w-full max-w-5xl flex-1 flex-col gap-4">

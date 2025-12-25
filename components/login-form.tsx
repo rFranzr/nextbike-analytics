@@ -88,7 +88,7 @@ export function LoginForm() {
       <Card className="w-full">
         <CardHeader>
           <CardTitle>Nextbike Analytics Login</CardTitle>
-          <CardDescription>Sign in with your Nextbike mobile number and PIN.</CardDescription>
+          <CardDescription>Sign in with your Nextbike mobile number and PIN to get started! 🚴</CardDescription>
         </CardHeader>
         <CardContent>
           <form className="space-y-4" onSubmit={handleSubmit}>
@@ -120,13 +120,13 @@ export function LoginForm() {
             </div>
             {error ? <p className="text-sm text-destructive">{error}</p> : null}
             <Button type="submit" className="w-full" disabled={isLoading}>
-              {isLoading ? "Signing in…" : "Sign in"}
+              {isLoading ? "Signing in… 🚴" : "Sign in"}
             </Button>
           </form>
         </CardContent>
         <CardFooter>
           <p className="text-xs text-muted-foreground">
-            Your credentials are sent directly to the official Nextbike API endpoint as this application does not use any backend server or database. Your session data is stored temporarily in your browser&apos;s session storage and is never transmitted to any third-party service. You can clear this data at any time by logging out.
+            🔒 Your credentials are sent directly to the official Nextbike API endpoint as this application does not use any backend server or database. Your session data is stored temporarily in your browser&apos;s session storage and is never transmitted to any third-party service. You can clear this data at any time by logging out.
           </p>
         </CardFooter>
       </Card>

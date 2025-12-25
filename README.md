@@ -30,7 +30,7 @@ You can clear your session data at any time by logging out.
 
 If you find this project useful, consider buying me a coffee! ☕
 
-**[Buy me a coffee](https://buymeacoffee.com/rfranzr)**
+<a href="https://buymeacoffee.com/rfranzr" target="_blank" rel="noopener noreferrer" style="display: inline-block; background-color: #2563eb; color: white; padding: 0.5rem 1rem; border-radius: 0.5rem; text-decoration: none; font-weight: 500; margin-top: 0.5rem;">☕ Buy me a coffee</a>
 
 ## 🛠️ Development
 
