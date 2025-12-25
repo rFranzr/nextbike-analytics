@@ -110,7 +110,7 @@ export default function Page() {
               © {new Date().getFullYear()} Nextbike Analytics. Made with ❤️ for the Nextbike community 🚴‍♂️🚴‍♀️
             </p>
             <a
-              href="https://github.com/yourusername/nextbike-analysis"
+              href="https://github.com/rfranzr/nextbike-analytics"
               target="_blank"
               rel="noopener noreferrer"
               className="text-sm text-muted-foreground hover:text-foreground transition-colors underline"
