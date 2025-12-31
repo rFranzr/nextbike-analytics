@@ -110,14 +110,24 @@ export default function Page() {
             <p className="text-sm text-muted-foreground">
               © {new Date().getFullYear()} Nextbike Analytics. Made with ❤️ for the Nextbike community 🚴‍♂️🚴‍♀️
             </p>
-            <a
-              href="https://github.com/rfranzr/nextbike-analytics"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-sm text-muted-foreground hover:text-foreground transition-colors underline"
-            >
-              View on GitHub
-            </a>
+            <div className="flex items-center gap-4">
+              <a
+                href="https://github.com/rFranzr/nextbike-analytics/blob/main/privacy.md"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-sm text-muted-foreground hover:text-foreground transition-colors underline"
+              >
+                Privacy Policy
+              </a>
+              <a
+                href="https://github.com/rfranzr/nextbike-analytics"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-sm text-muted-foreground hover:text-foreground transition-colors underline"
+              >
+                View on GitHub
+              </a>
+            </div>
           </div>
         </div>
       </footer>
