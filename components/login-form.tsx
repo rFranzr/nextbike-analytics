@@ -25,12 +25,15 @@ type LoginResponse = {
 };
 
 const LOGIN_URL = "https://api.nextbike.net/api/v1.1/login.json";
+const PIN_RECOVER_URL = "https://api.nextbike.net/api/pinRecover.xml";
 
 export function LoginForm() {
   const [mobile, setMobile] = useState("");
   const [pin, setPin] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [isRecoveringPin, setIsRecoveringPin] = useState(false);
+  const [pinRecoveryMessage, setPinRecoveryMessage] = useState<string | null>(null);
   const router = useRouter();
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
@@ -43,6 +46,7 @@ export function LoginForm() {
 
     setIsLoading(true);
     setError(null);
+    setPinRecoveryMessage(null);
 
     try {
       const response = await axios.get<LoginResponse>(LOGIN_URL, {
@@ -83,6 +87,42 @@ export function LoginForm() {
     }
   }
 
+  async function handlePinRecovery() {
+    if (!mobile) {
+      setError("Please enter your mobile number first.");
+      return;
+    }
+
+    setIsRecoveringPin(true);
+    setError(null);
+    setPinRecoveryMessage(null);
+
+    try {
+      await axios.get(PIN_RECOVER_URL, {
+        params: {
+          apikey: NEXTBIKE_API_KEY,
+          version: "1.0",
+          mobile: mobile.replace(/\s/g, ""), // Remove any spaces from mobile number
+        },
+        responseType: "text", // The API returns XML/text
+      });
+
+      // The API typically returns a message like "Check phone number for existence"
+      // or similar confirmation messages
+      setPinRecoveryMessage(
+        "PIN recovery message sent! Please check your phone for the PIN. If you don't receive it, please verify your mobile number is correct."
+      );
+    } catch (err) {
+      const message =
+        axios.isAxiosError(err) && err.response
+          ? `PIN recovery failed: ${err.response.status} ${err.response.statusText}`
+          : "PIN recovery request failed. Please try again.";
+      setError(message);
+    } finally {
+      setIsRecoveringPin(false);
+    }
+  }
+
   return (
     <div className="flex items-center justify-center from-background to-muted">
       <Card className="w-full">
@@ -106,7 +146,17 @@ export function LoginForm() {
               />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="pin">PIN</Label>
+              <div className="flex items-center justify-between">
+                <Label htmlFor="pin">PIN</Label>
+                <button
+                  type="button"
+                  onClick={handlePinRecovery}
+                  disabled={isLoading || isRecoveringPin || !mobile}
+                  className="text-xs text-muted-foreground hover:text-foreground underline disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  {isRecoveringPin ? "Sending…" : "Forgot PIN?"}
+                </button>
+              </div>
               <Input
                 id="pin"
                 name="pin"
@@ -119,6 +169,9 @@ export function LoginForm() {
               />
             </div>
             {error ? <p className="text-sm text-destructive">{error}</p> : null}
+            {pinRecoveryMessage ? (
+              <p className="text-sm text-green-600 dark:text-green-400">{pinRecoveryMessage}</p>
+            ) : null}
             <Button type="submit" className="w-full" disabled={isLoading}>
               {isLoading ? "Signing in… 🚴" : "Sign in"}
             </Button>
